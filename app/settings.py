@@ -126,10 +126,10 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Uncomment the next line to enable the admin:
-    'django.contrib.admin',
+    # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
-	'main',
+	'main', 'openpgp_auth',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -160,3 +160,10 @@ LOGGING = {
         },
     }
 }
+
+# Custom user models and authentication
+AUTHENTICATION_BACKENDS = ('openpgp_auth.backend.PGPAuthBackend',)
+AUTH_USER_MODEL = 'openpgp_auth.User'
+
+# OpenPGP-auth configuration
+GPG_HOME = os.path.join(SITE_ROOT, '.gpg')

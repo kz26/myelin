@@ -1,5 +1,7 @@
 from django.core.cache import cache
+from django.views.base import View
 from django.contrib import auth
+from django.shortcuts import *
 
 from rest_framework.views import *
 from rest_framework.response import Response
@@ -7,6 +9,22 @@ from rest_framework.response import Response
 from openpgp_auth.gpg import GPG
 from openpgp_auth.models import User
 from openpgp_auth.string_utils import *
+
+class RegisterView(View):
+	template_name = 'openpgp_auth/register.html'
+	def get(self, request, *args, **kwargs):
+		form = RegisterForm()
+		return render(request, template_name, {'form': form})	
+	def post(self, request, *args, **kwargs):
+		form = RegisterForm(request.POST, request.FILES)
+		if form.is_valid():
+			pubkey = form.get_pubkey()
+			result = gpg.import_keys(pubkey)
+			if result.imported == 1:
+				return redirect('home')
+			else:
+				return render(request, template_name, {'form': form, 'import_error': True})
+		return render(request, template_name, {'form': form})
 
 class LoginChallengeView(APIView):
 	def post(self, request, *args, **kwargs):
@@ -19,7 +37,6 @@ class LoginChallengeView(APIView):
 			cache.set(user.pubkey.pubkey_fingerprint, challengeStr, 60)
 			challenge = GPG.encrypt(challengeStr, user.pubkey.pubkey_fingerprint)
 			return Response({'challenge': challenge}, status=200) 
-
 		return Response({'error': 'pubkey_fingerprint must be provided'}, status=400)
 
 class LoginResponseView(APIView):

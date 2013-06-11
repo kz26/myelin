@@ -14,7 +14,7 @@ class UserManager(BaseUserManager):
 		pass
 
 class User(object):
-	username = models.CharField(max_length=30, unique=True, db_index=True)
+	username = models.CharField(max_length=30, db_index=True)
 	pubkey = models.TextField(unique=True, db_index=False)
 	pubkey_fingerprint = models.CharField(max_length=40, unique=True, db_index=True)
 	pubkey_info = PickledObjectField()

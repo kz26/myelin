@@ -161,6 +161,14 @@ LOGGING = {
     }
 }
 
+# Caching
+CACHES = {
+	'default': {
+		'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+		'LOCATION': '127.0.0.1:11211',
+	}
+}
+
 # Custom user models and authentication
 AUTHENTICATION_BACKENDS = ('openpgp_auth.backend.PGPAuthBackend',)
 AUTH_USER_MODEL = 'openpgp_auth.User'

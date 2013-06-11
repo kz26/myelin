@@ -36,4 +36,5 @@ nosetests.xml
 .pydevproject
 
 .*.swp
-node_modules/*
+node_modules
+.gnupg

@@ -1,17 +1,13 @@
-from app.users.models import User
+from app.users.models import PGPUser
 
 class PGPAuthBackend(object):
 	def get_user(user_id):
 		try:
-			return User.objects.get(pk=user_id)
-		except User.DoesNotExist:
+			return PGPUser.objects.get(pk=user_id)
+		except PGPUser.DoesNotExist:
 			return None
 
-	def authenticate(self, pubkey, challenge, response):
-		try:
-			user = User.objects.get(pubkey=pubkey)
-		except:
-			return None
+	def authenticate(self, user, challenge, response):
 		if challenge == response:
 			return user
 		return None

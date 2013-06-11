@@ -1,0 +1,41 @@
+{% extends "index.html" %}
+{% block content %}
+<div class="row">
+	<div class="span12">
+		<form class="form-horizontal" enctype="multipart/form-data" method="post">
+			{{ form.non_field_errors }}
+			{% if import_error %}
+			<div class="alert alert-error">
+    			An error occurred while importing your public key. The key may be invalid or already registered.
+			</div>
+			{% endif %}
+			{% csrf_token %}
+			<div class="control-group">
+				<label class="control-label" for="inputUsername">Username</label>
+				<div class="controls">
+					<input type="text" id="inputUsername" name="username" value="{{ form.username.value|default_if_none:"" }}">
+					{{ form.username.errors }}
+					<span class="help-block">30 chars max; alphanumeric, _, and - only</span>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="inputPubkeyFile">OpenPGP public key file</label>
+				<div class="controls">
+					<input type="file" id="inputPubkeyFile" name="pubkey_file">
+					<span class="help-block">The file must contain your public key in ASCII-armored format.</span>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="inputPubkeyString">OpenPGP public key (direct input)</label>
+				<div class="controls">
+					<span class="help-block">Alternatively, you may copy and paste your public key in ASCII-armored format below.</span>
+					<textarea id="inputPubkeyString" class="span8" rows="20" name="pubkey_string">{{ form.pubkey_string.value|default_if_none:"" }}</textarea>
+				</div>
+			</div>
+			<div class="form-actions">
+				<button class="btn btn-primary" type="submit">Register</button>
+			</div>
+		</form>
+	</div>
+</div>
+{% endblock %}

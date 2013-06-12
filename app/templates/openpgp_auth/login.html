@@ -1,0 +1,38 @@
+{% extends "index.html" %}
+{% block content %}
+<div class="row">
+	<div class="span12" ng-app="app" ng-controller="LoginCtrl">
+		<form class="form-horizontal" enctype="multipart/form-data" name="form" method="post" novalidate>
+			<div class="control-group">
+				<label class="control-label" for="inputPrivateKeyFile">OpenPGP private key file</label>
+				<div class="controls">
+					<input type="file" id="inputPrivateKeyFile" name="privkey_file" required>
+					<span class="help-block">The file must contain your private key in ASCII-armored format. Your private
+					key is used locally for decryption only and is NEVER sent to the server.</span>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="inputPrivateKeyPassword">OpenPGP private key password</label>
+				<div class="controls">
+					<input type="password" id="inputPrivateKeyPassword" name="privkey_password" ng-model="privateKeyPassword">
+					<span class="help-block">If your private key is password-protected, enter the password here.</span>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="inputPublicKeyFile">OpenPGP public key file</label>
+				<div class="controls">
+					<input type="file" id="inputPublicKeyFile" name="pubkey_file" required>
+					<span class="help-block">The file must contain your public key in ASCII-armored format.</span>
+				</div>
+			</div>
+			<div class="form-actions">
+				<button class="btn btn-primary" type="submit" ng-click="login()" ng-disabled="form.$invalid">Login</button>
+			</div>
+		</form>
+	</div>
+</div>
+{% endblock %}
+{% block script %}
+<script src="{{ STATIC_URL }}js/services.js"></script>
+<script src="{{ STATIC_URL }}js/login.js"></script>
+{% endblock %}

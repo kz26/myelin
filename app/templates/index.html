@@ -62,11 +62,13 @@
 
         </div> <!-- /container -->
 
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="{{ STATIC_URL }}js/vendor/jquery-2.0.0.min.js"><\/script>')</script>
-
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
         <script src="{{ STATIC_URL }}js/vendor/bootstrap.min.js"></script>
+        <script src="{{ STATIC_URL }}js/vendor/openpgp.js"></script>
+        <script src="{{ STATIC_URL }}js/vendor/angular.min.js"></script>
+        <script src="{{ STATIC_URL }}js/vendor/angular-cookies.min.js"></script>
 
-        <script src="{{ STATIC_URL }}js/main.js"></script>
+		{% block script %}{% endblock %}
+
     </body>
 </html>

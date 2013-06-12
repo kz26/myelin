@@ -6,7 +6,7 @@ from django.shortcuts import *
 from rest_framework.views import *
 from rest_framework.response import Response
 
-from app.openpgp_auth.gpg import GPG
+from app.openpgp_auth.gpg import GPG, get_key_info
 from app.openpgp_auth.models import PGPUser
 from app.openpgp_auth.string_utils import *
 from app.openpgp_auth.forms import *
@@ -23,6 +23,8 @@ class RegisterView(View):
 			pubkey = form.pubkey
 			result = GPG.import_keys(pubkey)
 			if result.imported == 1:
+				pubkey_info = get_key_info(result.fingerprints[0])
+				PGPUser.objects.create_user(form.cleaned_data['username'], pubkey, pubkey_info)
 				return redirect('home')
 			else:
 				return render(request, self.template_name, {'form': form, 'import_error': True})
@@ -36,8 +38,8 @@ class LoginChallengeView(APIView):
 			except PGPUser.DoesNotExist:
 				return Response({'error': 'Unregistered public key'}, status=403)
 			challengeStr = randomString()
-			cache.set(user.pubkey.pubkey_fingerprint, challengeStr, 60)
-			challenge = GPG.encrypt(challengeStr, user.pubkey.pubkey_fingerprint)
+			cache.set(user.pubkey_fingerprint, challengeStr, 60)
+			challenge = str(GPG.encrypt(challengeStr, user.pubkey_fingerprint, always_trust=True))
 			return Response({'challenge': challenge}, status=200) 
 		return Response({'error': 'pubkey_fingerprint must be provided'}, status=400)
 
@@ -50,7 +52,7 @@ class LoginResponseView(APIView):
 				return Response({'error': 'Invalid pubkey'}, status=403)
 			challengeStr = cache.get(user.pubkey_fingerprint, '') 
 			cache.delete(user.pubkey_fingerprint)
-			user = auth.authenticate(user, challengeStr, request.DATA['response'])
+			user = auth.authenticate(user=user, challenge=challengeStr, response=request.DATA['response'])
 			if user is not None:
 				auth.login(request, user)
 				return Response(None, status=204)

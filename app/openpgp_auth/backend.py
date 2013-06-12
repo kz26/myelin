@@ -1,4 +1,4 @@
-from app.users.models import PGPUser
+from app.openpgp_auth.models import PGPUser
 
 class PGPAuthBackend(object):
 	def get_user(user_id):

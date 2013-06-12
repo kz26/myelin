@@ -27,5 +27,5 @@ class PGPUser(models.Model):
 
 	def save(self, *args, **kwargs):
 		if not self.id:
-			self.pubkey_fingerprint = self.pubkey_info.fingerprint
+			self.pubkey_fingerprint = self.pubkey_info['fingerprint']
 		super(PGPUser, self).save(*args, **kwargs)

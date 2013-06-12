@@ -1,0 +1,38 @@
+{% extends "index.html" %}
+{% block content %}
+<div class="row">
+	<div class="span12">
+		{% verbatim %}
+		<div ng-app="app" ng-controller="KeygenCtrl" novalidate>
+			<form class="form-horizontal" name="form">
+				<div class="control-group">
+					<label class="control-label" for="inputName">Name</label>
+					<div class="controls">
+						<input type="text" id="inputName" ng-model="name" required>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="inputEmail">Email</label>
+					<div class="controls">
+						<input type="text" id="inputEmail" ng-model="email" required>
+					</div>
+				</div>
+				<div ng-show="keys">
+					<h3>Your private key</h3>
+					<pre>{{ keys.privateKeyArmored }}</pre>
+					<button class="btn" ng-click="downloadPrivateKey()">Download private key</button>
+					<h3>Your public key</h3>
+					<pre>{{ keys.publicKeyArmored }}</pre>
+					<button class="btn" ng-click="downloadPublicKey()">Download public key</button>
+				</div>
+				<button class="btn btn-primary" style="margin-top: 1em;" ng-disabled="form.$invalid" ng-click="generate()">Generate keys</button>
+			</form>
+		</div>
+		{% endverbatim %}
+	</div>
+</div>
+{% endblock %}
+{% block script %}
+<script src="{{ STATIC_URL }}js/services.js"></script>
+<script src="{{ STATIC_URL }}js/keygen.js"></script>
+{% endblock %}

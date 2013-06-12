@@ -172,6 +172,7 @@ CACHES = {
 # Custom user models and authentication
 AUTHENTICATION_BACKENDS = ('app.openpgp_auth.backend.PGPAuthBackend',)
 AUTH_USER_MODEL = 'openpgp_auth.PGPUser'
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # OpenPGP-auth configuration
 GPG_HOME = os.path.join(SITE_ROOT, '.gnupg')
